@@ -1,0 +1,53 @@
+{
+  "name": "greenplate",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "clean": "rm -rf .next out dist coverage",
+    "analyze": "ANALYZE=true npm run build",
+    "db:types": "supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > lib/utils/supabase/database.types.ts",
+    "setup": "npm install && cp .env.example .env.local && echo 'Setup complete! Please edit .env.local with your values.'",
+    "check": "npm run type-check && npm run lint && npm run test:ci",
+    "preview": "npm run build && npm start"
+  },
+  "dependencies": {
+    "@sentry/nextjs": "^9.38.0",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.50.5",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.525.0",
+    "next": "15.3.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.2",
+    "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.4",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5"
+  }
+}
