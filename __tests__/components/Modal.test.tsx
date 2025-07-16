@@ -177,7 +177,7 @@ describe("Modal", () => {
       );
       
       const header = screen.getByText("Header").parentElement;
-      expect(header).toHaveClass("px-6", "py-4", "border-b");
+      expect(header).toHaveClass("px-4", "py-4", "sm:px-6", "sm:py-4", "border-b", "border-[var(--border)]");
     });
   });
 
@@ -200,7 +200,7 @@ describe("Modal", () => {
       );
       
       const bodyWrapper = screen.getByTestId("modal-body");
-      expect(bodyWrapper).toHaveClass("px-6", "py-4");
+      expect(bodyWrapper).toHaveClass("px-4", "py-4", "sm:px-6", "sm:py-4");
     });
   });
 
@@ -225,7 +225,7 @@ describe("Modal", () => {
       );
       
       const footer = screen.getByTestId("modal-footer");
-      expect(footer).toHaveClass("px-6", "py-4", "border-t", "flex", "justify-end");
+      expect(footer).toHaveClass("px-4", "py-4", "sm:px-6", "sm:py-4", "border-t", "border-[var(--border)]", "flex", "justify-end");
     });
   });
 
@@ -317,6 +317,52 @@ describe("Modal", () => {
       
       expect(onConfirm).not.toHaveBeenCalled();
       expect(onClose).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("Responsive behavior", () => {
+    it("applies responsive padding to header", () => {
+      render(
+        <Modal isOpen={true} onClose={() => {}}>
+          <ModalHeader>Header</ModalHeader>
+        </Modal>
+      );
+      
+      const header = screen.getByText("Header").parentElement;
+      expect(header).toHaveClass("px-4", "py-4", "sm:px-6", "sm:py-4");
+    });
+
+    it("applies responsive padding to body", () => {
+      render(
+        <Modal isOpen={true} onClose={() => {}}>
+          <ModalBody data-testid="modal-body">Body</ModalBody>
+        </Modal>
+      );
+      
+      const body = screen.getByTestId("modal-body");
+      expect(body).toHaveClass("px-4", "py-4", "sm:px-6", "sm:py-4");
+    });
+
+    it("applies responsive padding to footer", () => {
+      render(
+        <Modal isOpen={true} onClose={() => {}}>
+          <ModalFooter data-testid="modal-footer">Footer</ModalFooter>
+        </Modal>
+      );
+      
+      const footer = screen.getByTestId("modal-footer");
+      expect(footer).toHaveClass("px-4", "py-4", "sm:px-6", "sm:py-4", "flex", "flex-col", "sm:flex-row");
+    });
+
+    it("applies fullScreenOnMobile classes when enabled", () => {
+      render(
+        <Modal isOpen={true} onClose={() => {}} fullScreenOnMobile={true}>
+          <ModalBody>Content</ModalBody>
+        </Modal>
+      );
+      
+      const modalContainer = document.querySelector('[role="dialog"]');
+      expect(modalContainer).toHaveClass("rounded-none", "sm:rounded-xl");
     });
   });
 });

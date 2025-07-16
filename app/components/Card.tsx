@@ -32,9 +32,9 @@ export function Card({
 }: CardProps) {
   const paddingStyles = {
     none: "",
-    sm: "p-3",
-    md: "p-6",
-    lg: "p-8"
+    sm: "p-3 sm:p-4",
+    md: "p-4 sm:p-6",
+    lg: "p-6 sm:p-8"
   };
 
   const shadowStyles = {
@@ -47,11 +47,11 @@ export function Card({
   return (
     <div
       className={clsx(
-        "bg-white dark:bg-gray-800 rounded-xl transition-colors",
+        "bg-[var(--card)] rounded-xl transition-colors",
         paddingStyles[padding],
         shadowStyles[shadow],
-        border && "border border-gray-200 dark:border-gray-700",
-        hover && "hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200",
+        border && "border border-[var(--border)]",
+        hover && "hover:shadow-md hover:border-[var(--muted)] transition-all duration-200",
         className
       )}
       {...props}
@@ -64,7 +64,7 @@ export function Card({
 export function CardHeader({ children, className, ...props }: CardHeaderProps) {
   return (
     <div
-      className={clsx("border-b border-gray-200 dark:border-gray-700 pb-4 mb-4", className)}
+      className={clsx("border-b border-[var(--border)] pb-3 mb-3 sm:pb-4 sm:mb-4", className)}
       {...props}
     >
       {children}
@@ -74,7 +74,7 @@ export function CardHeader({ children, className, ...props }: CardHeaderProps) {
 
 export function CardBody({ children, className, ...props }: CardBodyProps) {
   return (
-    <div className={clsx("text-gray-700 dark:text-gray-300", className)} {...props}>
+    <div className={clsx("text-[var(--muted)]", className)} {...props}>
       {children}
     </div>
   );
@@ -83,7 +83,7 @@ export function CardBody({ children, className, ...props }: CardBodyProps) {
 export function CardFooter({ children, className, ...props }: CardFooterProps) {
   return (
     <div
-      className={clsx("border-t border-gray-200 dark:border-gray-700 pt-4 mt-4", className)}
+      className={clsx("border-t border-[var(--border)] pt-3 mt-3 sm:pt-4 sm:mt-4", className)}
       {...props}
     >
       {children}

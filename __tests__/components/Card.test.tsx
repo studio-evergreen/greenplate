@@ -11,13 +11,13 @@ describe("Card", () => {
     it("applies default classes", () => {
       const { container } = render(<Card>Content</Card>);
       const card = container.firstChild;
-      expect(card).toHaveClass("bg-white", "dark:bg-gray-800", "rounded-xl", "p-6", "shadow-sm");
+      expect(card).toHaveClass("bg-[var(--card)]", "rounded-xl", "p-4", "sm:p-6", "shadow-sm");
     });
 
     it("applies custom padding", () => {
       const { container } = render(<Card padding="lg">Content</Card>);
       const card = container.firstChild;
-      expect(card).toHaveClass("p-8");
+      expect(card).toHaveClass("p-6", "sm:p-8");
     });
 
     it("applies custom shadow", () => {
@@ -29,7 +29,7 @@ describe("Card", () => {
     it("applies border when enabled", () => {
       const { container } = render(<Card border={true}>Content</Card>);
       const card = container.firstChild;
-      expect(card).toHaveClass("border", "border-gray-200", "dark:border-gray-700");
+      expect(card).toHaveClass("border", "border-[var(--border)]");
     });
 
     it("does not apply border when disabled", () => {
@@ -41,7 +41,7 @@ describe("Card", () => {
     it("applies hover effects when enabled", () => {
       const { container } = render(<Card hover={true}>Content</Card>);
       const card = container.firstChild;
-      expect(card).toHaveClass("hover:shadow-md", "hover:border-gray-300");
+      expect(card).toHaveClass("hover:shadow-md", "hover:border-[var(--muted)]");
     });
 
     it("accepts custom className", () => {
@@ -65,7 +65,7 @@ describe("Card", () => {
     it("applies default header styles", () => {
       const { container } = render(<CardHeader>Header</CardHeader>);
       const header = container.firstChild;
-      expect(header).toHaveClass("border-b", "border-gray-200", "dark:border-gray-700", "pb-4", "mb-4");
+      expect(header).toHaveClass("border-b", "border-[var(--border)]", "pb-3", "mb-3", "sm:pb-4", "sm:mb-4");
     });
 
     it("accepts custom className", () => {
@@ -84,7 +84,7 @@ describe("Card", () => {
     it("applies default body styles", () => {
       const { container } = render(<CardBody>Body</CardBody>);
       const body = container.firstChild;
-      expect(body).toHaveClass("text-gray-700", "dark:text-gray-300");
+      expect(body).toHaveClass("text-[var(--muted)]");
     });
 
     it("accepts custom className", () => {
@@ -103,7 +103,7 @@ describe("Card", () => {
     it("applies default footer styles", () => {
       const { container } = render(<CardFooter>Footer</CardFooter>);
       const footer = container.firstChild;
-      expect(footer).toHaveClass("border-t", "border-gray-200", "dark:border-gray-700", "pt-4", "mt-4");
+      expect(footer).toHaveClass("border-t", "border-[var(--border)]", "pt-3", "mt-3", "sm:pt-4", "sm:mt-4");
     });
 
     it("accepts custom className", () => {
@@ -132,6 +132,32 @@ describe("Card", () => {
       expect(screen.getByText("Card Title")).toBeInTheDocument();
       expect(screen.getByText("Card content goes here.")).toBeInTheDocument();
       expect(screen.getByText("Action")).toBeInTheDocument();
+    });
+  });
+
+  describe("Responsive behavior", () => {
+    it("applies responsive padding classes", () => {
+      const { container } = render(<Card padding="md">Content</Card>);
+      const card = container.firstChild;
+      expect(card).toHaveClass("p-4", "sm:p-6");
+    });
+
+    it("applies responsive padding for small size", () => {
+      const { container } = render(<Card padding="sm">Content</Card>);
+      const card = container.firstChild;
+      expect(card).toHaveClass("p-3", "sm:p-4");
+    });
+
+    it("CardHeader has responsive spacing", () => {
+      const { container } = render(<CardHeader>Header</CardHeader>);
+      const header = container.firstChild;
+      expect(header).toHaveClass("pb-3", "mb-3", "sm:pb-4", "sm:mb-4");
+    });
+
+    it("CardFooter has responsive spacing", () => {
+      const { container } = render(<CardFooter>Footer</CardFooter>);
+      const footer = container.firstChild;
+      expect(footer).toHaveClass("pt-3", "mt-3", "sm:pt-4", "sm:mt-4");
     });
   });
 });

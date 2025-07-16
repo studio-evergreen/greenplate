@@ -72,4 +72,24 @@ describe('Button Component', () => {
     const button = screen.getByRole('button');
     expect(button).toHaveClass('custom-class');
   });
+
+  describe('Responsive behavior', () => {
+    it('applies responsive size classes for medium size', () => {
+      render(<Button size="md">Medium Button</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('py-3', 'px-4', 'sm:py-2.5', 'sm:px-4', 'text-base', 'gap-2');
+    });
+
+    it('applies responsive size classes for large size', () => {
+      render(<Button size="lg">Large Button</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('py-4', 'px-6', 'sm:py-3', 'sm:px-5', 'text-lg', 'gap-2');
+    });
+
+    it('applies small size classes', () => {
+      render(<Button size="sm">Small Button</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('py-2', 'px-3', 'text-sm', 'gap-1');
+    });
+  });
 });

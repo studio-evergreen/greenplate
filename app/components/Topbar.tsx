@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, Languages, Menu, X } from "lucide-react";
+import { Settings, Menu, X } from "lucide-react";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { siteConfig } from "../config";
 import { createSupabaseClientForBrowser } from "@/lib/utils/supabase/client";
@@ -129,9 +129,7 @@ export default function Topbar() {
                 <Settings size={22} />
               </button>
               <ThemeToggle />
-              <button className="p-2 rounded hover:bg-white/10" aria-label="Language">
-                <Languages size={22} />
-              </button>
+              <LanguageDropdown />
             </div>
             <Link href="/components" className="text-[var(--foreground)] text-lg font-semibold font-inter" onClick={() => setMenuOpen(false)}>
               {t("common.components")}

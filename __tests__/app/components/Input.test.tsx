@@ -89,4 +89,24 @@ describe('Input Component', () => {
     expect(input).toBeDisabled();
     expect(input).toHaveClass('opacity-60', 'cursor-not-allowed');
   });
+
+  describe('Responsive behavior', () => {
+    it('applies responsive size classes for medium size', () => {
+      render(<Input size="md" placeholder="Medium input" />);
+      const input = screen.getByPlaceholderText('Medium input');
+      expect(input).toHaveClass('px-4', 'py-3', 'sm:py-2.5', 'text-base');
+    });
+
+    it('applies responsive size classes for large size', () => {
+      render(<Input size="lg" placeholder="Large input" />);
+      const input = screen.getByPlaceholderText('Large input');
+      expect(input).toHaveClass('px-5', 'py-4', 'sm:py-3', 'text-lg');
+    });
+
+    it('applies small size classes', () => {
+      render(<Input size="sm" placeholder="Small input" />);
+      const input = screen.getByPlaceholderText('Small input');
+      expect(input).toHaveClass('px-3', 'py-2', 'text-sm');
+    });
+  });
 });
