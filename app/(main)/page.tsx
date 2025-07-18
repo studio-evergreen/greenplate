@@ -1,4 +1,13 @@
-import {siteConfig} from "@/app/config";
+import { Metadata } from "next";
+import { siteConfig, generateSEOConfig } from "@/app/config";
+import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
+
+export const metadata: Metadata = generateSEOMetadata(generateSEOConfig({
+  title: `${siteConfig.name} - Home`,
+  description: `${siteConfig.description}. Modern web application built with Next.js and React.`,
+  url: "/",
+  type: "website",
+}));
 
 export default function Home() {
   return (

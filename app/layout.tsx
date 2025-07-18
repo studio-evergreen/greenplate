@@ -5,7 +5,8 @@ import { LanguageProvider } from "./components/LanguageProvider";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ToastProvider } from "./components/ToastProvider";
-import { siteConfig } from "./config";
+import { siteConfig, generateSEOConfig } from "./config";
+import { generateMetadata as generateSEOMetadata, generateJsonLd } from "@/lib/utils/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,14 +18,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: siteConfig.name,
-  description: siteConfig.description,
-};
+export const metadata: Metadata = generateSEOMetadata(generateSEOConfig());
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const jsonLd = generateJsonLd(generateSEOConfig());
+  
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd),
+          }}
+        />
+      </head>
       <body
         className={`flex flex-col min-h-screen ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
