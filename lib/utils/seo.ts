@@ -44,7 +44,7 @@ export function generateMetadata(config: SEOConfig = {}): Metadata {
         },
       ],
       locale: locale || siteConfig.locale,
-      type: type,
+      type: type as "article" | "website",
     },
 
     // Twitter Card
