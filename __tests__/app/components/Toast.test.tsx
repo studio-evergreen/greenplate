@@ -63,6 +63,11 @@ describe('Toast', () => {
     const closeButton = screen.getByRole('button');
     await user.click(closeButton);
     
+    // Wait for the 300ms timeout
+    await act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+    
     expect(defaultProps.onClose).toHaveBeenCalledWith('test-toast');
   });
 
@@ -71,8 +76,9 @@ describe('Toast', () => {
     
     expect(defaultProps.onClose).not.toHaveBeenCalled();
     
+    // Advance 3000ms for the auto-close, then 300ms for the animation
     await act(async () => {
-      jest.advanceTimersByTime(3000);
+      jest.advanceTimersByTime(3000 + 300);
     });
     
     expect(defaultProps.onClose).toHaveBeenCalledWith('test-toast');
@@ -83,8 +89,9 @@ describe('Toast', () => {
     
     expect(defaultProps.onClose).not.toHaveBeenCalled();
     
+    // Advance 5000ms for the auto-close, then 300ms for the animation
     await act(async () => {
-      jest.advanceTimersByTime(5000);
+      jest.advanceTimersByTime(5000 + 300);
     });
     
     expect(defaultProps.onClose).toHaveBeenCalledWith('test-toast');
@@ -115,6 +122,12 @@ describe('Toast', () => {
     
     // Press Enter
     await user.keyboard('{Enter}');
+    
+    // Wait for the 300ms timeout
+    await act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+    
     expect(defaultProps.onClose).toHaveBeenCalledWith('test-toast');
   });
 
@@ -163,7 +176,11 @@ describe('Toast', () => {
     const closeButton = screen.getByRole('button');
     await user.click(closeButton);
     
-    // Should call onClose immediately
+    // Should call onClose after 300ms animation
+    await act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+    
     expect(defaultProps.onClose).toHaveBeenCalledWith('test-toast');
   });
 });

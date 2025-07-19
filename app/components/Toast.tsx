@@ -54,9 +54,11 @@ export function Toast({ id, type, title, message, duration = 5000, onClose }: To
 
   const handleClose = useCallback(() => {
     setIsLeaving(true);
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       onClose(id);
     }, 300);
+    // Store timeout ID for potential cleanup in tests
+    (handleClose as typeof handleClose & { __timeoutId?: NodeJS.Timeout }).__timeoutId = timeoutId;
   }, [id, onClose]);
 
   useEffect(() => {

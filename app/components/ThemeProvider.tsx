@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Theme } from "@/lib/utils/validation";
-import { getThemeCookie, setThemeCookie } from "@/lib/utils/cookies";
+import { Theme, isValidTheme } from "@/lib/utils/validation";
+import { getCookie, setThemeCookie } from "@/lib/utils/cookies";
 
 const ThemeContext = createContext<{
   theme: Theme;
@@ -15,17 +15,19 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     try {
       // 1. 쿠키에서 theme 읽기
-      const cookieTheme = getThemeCookie();
-      setThemeState(cookieTheme);
-      document.documentElement.classList.remove("light", "dark");
-      document.documentElement.classList.add(cookieTheme);
-      return;
+      const cookieTheme = getCookie('theme');
+      if (cookieTheme && isValidTheme(cookieTheme)) {
+        setThemeState(cookieTheme);
+        document.documentElement.classList.remove("light", "dark");
+        document.documentElement.classList.add(cookieTheme);
+        return;
+      }
     } catch (error) {
       console.warn('Failed to load theme from cookie:', error);
     }
     
     try {
-      // 2. 시스템 다크모드 감지
+      // 2. 시스템 다크모드 감지 (쿠키가 없거나 유효하지 않을 때만)
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       const initialTheme: Theme = prefersDark ? "dark" : "light";
       setThemeState(initialTheme);
