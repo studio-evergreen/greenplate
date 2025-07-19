@@ -13,44 +13,150 @@ interface CodeBlockProps {
   className?: string;
 }
 
-// Simple syntax highlighting for common tokens
+// Simple syntax highlighting using React elements - safer than dangerouslySetInnerHTML
 const highlightCode = (code: string, language: string) => {
-  if (language === 'tsx' || language === 'ts' || language === 'jsx' || language === 'js') {
-    return code
-      // Comments
-      .replace(/(\/\/.*$)/gm, '<span class="text-gray-500 italic">$1</span>')
-      .replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="text-gray-500 italic">$1</span>')
-      // Strings
-      .replace(/(['"`])((?:\\.|(?!\1)[^\\])*?)\1/g, '<span class="text-green-400">$1$2$1</span>')
-      // Keywords
-      .replace(/\b(import|export|from|const|let|var|function|return|if|else|for|while|class|extends|interface|type|enum|async|await|try|catch|finally|throw|new|this|super|static|public|private|protected|readonly|abstract|implements|as|is|in|of|typeof|instanceof|default|case|switch|break|continue|do|null|undefined|true|false)\b/g, '<span class="text-blue-400 font-medium">$1</span>')
-      // JSX tags
-      .replace(/(&lt;\/?)([A-Z][a-zA-Z0-9]*)/g, '$1<span class="text-red-400">$2</span>')
-      .replace(/(&lt;\/?)([a-z][a-zA-Z0-9]*)/g, '$1<span class="text-blue-300">$2</span>')
-      // Props and attributes
-      .replace(/\s([a-zA-Z-]+)=/g, ' <span class="text-yellow-300">$1</span>=')
-      // Numbers
-      .replace(/\b(\d+\.?\d*)\b/g, '<span class="text-orange-400">$1</span>')
-      // Functions
-      .replace(/\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g, '<span class="text-purple-400">$1</span>(');
+  if (language !== 'tsx' && language !== 'ts' && language !== 'jsx' && language !== 'js') {
+    // For non-JS languages, just return plain text
+    return <span className="text-[var(--foreground)]">{code}</span>;
   }
+
+  const lines = code.split('\n');
   
-  if (language === 'css' || language === 'scss') {
-    return code
-      // Comments
-      .replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="text-gray-500 italic">$1</span>')
-      // Selectors
-      .replace(/^(\s*)([.#]?[a-zA-Z-_][a-zA-Z0-9-_]*)\s*{/gm, '$1<span class="text-yellow-300">$2</span> {')
-      // Properties
-      .replace(/(\s*)([a-zA-Z-]+)(\s*:)/g, '$1<span class="text-blue-400">$2</span>$3')
-      // Values
-      .replace(/(:\s*)([^;{}\s][^;{}]*)(;?)/g, '$1<span class="text-green-400">$2</span>$3')
-      // Units and colors
-      .replace(/\b(\d+(?:\.\d+)?(?:px|em|rem|%|vh|vw|deg|s|ms))\b/g, '<span class="text-orange-400">$1</span>')
-      .replace(/(#[0-9a-fA-F]{3,8})\b/g, '<span class="text-pink-400">$1</span>');
-  }
-  
-  return code;
+  return (
+    <>
+      {lines.map((line, lineIndex) => {
+        // Simple tokenization for JSX/TS
+        const tokens = [];
+        let currentPos = 0;
+        const lineLength = line.length;
+        
+        while (currentPos < lineLength) {
+          let matched = false;
+          
+          // Comments
+          if (line.slice(currentPos).match(/^\/\/.*/)) {
+            const match = line.slice(currentPos).match(/^\/\/.*/)?.[0] || '';
+            tokens.push(
+              <span key={`${lineIndex}-${currentPos}`} className="text-gray-500 italic">
+                {match}
+              </span>
+            );
+            currentPos += match.length;
+            matched = true;
+          }
+          // Block comments
+          else if (line.slice(currentPos).match(/^\/\*[\s\S]*?\*\//)) {
+            const match = line.slice(currentPos).match(/^\/\*[\s\S]*?\*\//)?.[0] || '';
+            tokens.push(
+              <span key={`${lineIndex}-${currentPos}`} className="text-gray-500 italic">
+                {match}
+              </span>
+            );
+            currentPos += match.length;
+            matched = true;
+          }
+          // Strings
+          else if (line.slice(currentPos).match(/^(['"`])((?:\\.|(?!\1)[^\\])*?)\1/)) {
+            const match = line.slice(currentPos).match(/^(['"`])((?:\\.|(?!\1)[^\\])*?)\1/)?.[0] || '';
+            tokens.push(
+              <span key={`${lineIndex}-${currentPos}`} className="text-green-400">
+                {match}
+              </span>
+            );
+            currentPos += match.length;
+            matched = true;
+          }
+          // Keywords
+          else if (line.slice(currentPos).match(/^\b(import|export|from|const|let|var|function|return|if|else|for|while|class|extends|interface|type|enum|async|await|try|catch|finally|throw|new|this|super|static|public|private|protected|readonly|abstract|implements|as|is|in|of|typeof|instanceof|default|case|switch|break|continue|do|null|undefined|true|false)\b/)) {
+            const match = line.slice(currentPos).match(/^\b(import|export|from|const|let|var|function|return|if|else|for|while|class|extends|interface|type|enum|async|await|try|catch|finally|throw|new|this|super|static|public|private|protected|readonly|abstract|implements|as|is|in|of|typeof|instanceof|default|case|switch|break|continue|do|null|undefined|true|false)\b/)?.[0] || '';
+            tokens.push(
+              <span key={`${lineIndex}-${currentPos}`} className="text-blue-400 font-medium">
+                {match}
+              </span>
+            );
+            currentPos += match.length;
+            matched = true;
+          }
+          // JSX tags
+          else if (line.slice(currentPos).match(/^<\/?[A-Z][a-zA-Z0-9]*/)) {
+            const match = line.slice(currentPos).match(/^<\/?[A-Z][a-zA-Z0-9]*/)?.[0] || '';
+            tokens.push(
+              <span key={`${lineIndex}-${currentPos}`} className="text-red-400">
+                {match}
+              </span>
+            );
+            currentPos += match.length;
+            matched = true;
+          }
+          // HTML tags
+          else if (line.slice(currentPos).match(/^<\/?[a-z][a-zA-Z0-9]*/)) {
+            const match = line.slice(currentPos).match(/^<\/?[a-z][a-zA-Z0-9]*/)?.[0] || '';
+            tokens.push(
+              <span key={`${lineIndex}-${currentPos}`} className="text-blue-300">
+                {match}
+              </span>
+            );
+            currentPos += match.length;
+            matched = true;
+          }
+          // Props and attributes
+          else if (line.slice(currentPos).match(/^\s+[a-zA-Z-]+=/)) {
+            const match = line.slice(currentPos).match(/^(\s+)([a-zA-Z-]+)(=)/);
+            if (match) {
+              tokens.push(
+                <span key={`${lineIndex}-${currentPos}`}>
+                  {match[1]}
+                  <span className="text-yellow-300">{match[2]}</span>
+                  {match[3]}
+                </span>
+              );
+              currentPos += match[0].length;
+              matched = true;
+            }
+          }
+          // Numbers
+          else if (line.slice(currentPos).match(/^\d+\.?\d*/)) {
+            const match = line.slice(currentPos).match(/^\d+\.?\d*/)?.[0] || '';
+            tokens.push(
+              <span key={`${lineIndex}-${currentPos}`} className="text-orange-400">
+                {match}
+              </span>
+            );
+            currentPos += match.length;
+            matched = true;
+          }
+          // Functions
+          else if (line.slice(currentPos).match(/^[a-zA-Z_$][a-zA-Z0-9_$]*(?=\s*\()/)) {
+            const match = line.slice(currentPos).match(/^[a-zA-Z_$][a-zA-Z0-9_$]*(?=\s*\()/)?.[0] || '';
+            tokens.push(
+              <span key={`${lineIndex}-${currentPos}`} className="text-purple-400">
+                {match}
+              </span>
+            );
+            currentPos += match.length;
+            matched = true;
+          }
+          
+          // If no pattern matched, just add the character as is
+          if (!matched) {
+            tokens.push(
+              <span key={`${lineIndex}-${currentPos}`} className="text-[var(--foreground)]">
+                {line[currentPos]}
+              </span>
+            );
+            currentPos += 1;
+          }
+        }
+        
+        return (
+          <div key={lineIndex}>
+            {tokens}
+            {lineIndex < lines.length - 1 && '\n'}
+          </div>
+        );
+      })}
+    </>
+  );
 };
 
 export function CodeBlock({
@@ -77,7 +183,7 @@ export function CodeBlock({
   const highlightedCode = highlightCode(children, language);
 
   return (
-    <div className={clsx("relative rounded-lg overflow-hidden border border-[var(--border)]", className)}>
+    <div className={clsx("relative rounded-lg overflow-hidden border border-[var(--border)] group", className)}>
       {/* Header */}
       {(title || showCopyButton) && (
         <div className="flex items-center justify-between bg-[var(--muted)]/20 px-4 py-2 border-b border-[var(--border)]">
@@ -116,7 +222,7 @@ export function CodeBlock({
       {/* Code Content */}
       <div className="relative bg-[var(--background)]">
         <pre className={clsx(
-          "overflow-x-auto text-sm leading-relaxed",
+          "overflow-x-auto text-sm leading-relaxed font-mono",
           showLineNumbers ? "pl-12" : "p-4"
         )}>
           {showLineNumbers && (
@@ -128,10 +234,9 @@ export function CodeBlock({
               ))}
             </div>
           )}
-          <code 
-            className={`language-${language} text-[var(--foreground)]`}
-            dangerouslySetInnerHTML={{ __html: highlightedCode }}
-          />
+          <code className={`language-${language}`}>
+            {highlightedCode}
+          </code>
         </pre>
         
         {/* Copy button overlay (when no header) */}
