@@ -17,7 +17,7 @@ export default function CookieConsentBanner() {
     analytics: false,
     marketing: false
   });
-  const { } = useLanguage(); // TODO: 다국어 지원 시 사용
+  const { t } = useLanguage();
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -35,8 +35,8 @@ export default function CookieConsentBanner() {
       setShowBanner(false);
       showToast({
         type: 'success',
-        title: '쿠키 설정 저장됨',
-        message: '모든 쿠키가 허용되었습니다.'
+        title: t('consent.toastSavedAllTitle'),
+        message: t('consent.toastSavedAllMessage')
       });
       
       // 페이지 새로고침으로 Analytics 활성화
@@ -45,8 +45,8 @@ export default function CookieConsentBanner() {
       console.error('Failed to save consent:', error);
       showToast({
         type: 'error',
-        title: '저장 실패',
-        message: '설정을 저장하는데 실패했습니다.'
+        title: t('consent.toastErrorTitle'),
+        message: t('consent.toastErrorMessage')
       });
     }
   };
@@ -57,8 +57,8 @@ export default function CookieConsentBanner() {
       setShowBanner(false);
       showToast({
         type: 'info',
-        title: '필수 쿠키만 저장됨',
-        message: '필수 쿠키만 허용되었습니다.'
+        title: t('consent.toastSavedNecessaryTitle'),
+        message: t('consent.toastSavedNecessaryMessage')
       });
     } catch (error) {
       console.error('Failed to save consent:', error);
@@ -77,8 +77,8 @@ export default function CookieConsentBanner() {
       setShowBanner(false);
       showToast({
         type: 'success',
-        title: '쿠키 설정 저장됨',
-        message: '사용자 정의 설정이 저장되었습니다.'
+        title: t('consent.toastSavedCustomTitle'),
+        message: t('consent.toastSavedCustomMessage')
       });
       
       // Analytics가 허용된 경우 페이지 새로고침
@@ -89,8 +89,8 @@ export default function CookieConsentBanner() {
       console.error('Failed to save consent:', error);
       showToast({
         type: 'error',
-        title: '저장 실패',
-        message: '설정을 저장하는데 실패했습니다.'
+        title: t('consent.toastErrorTitle'),
+        message: t('consent.toastErrorMessage')
       });
     }
   };
@@ -108,11 +108,10 @@ export default function CookieConsentBanner() {
                 <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                    쿠키 사용에 대한 동의
+                    {t('consent.title')}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                    저희는 웹사이트 기능 개선과 사용 분석을 위해 쿠키를 사용합니다. 
-                    필수 쿠키는 사이트 운영에 필요하며, 분석 쿠키는 사용자 경험 개선에 도움이 됩니다.
+                    {t('consent.description')}
                   </p>
                 </div>
               </div>
@@ -126,7 +125,7 @@ export default function CookieConsentBanner() {
                 leftIcon={<Settings size={16} />}
                 className="text-gray-600 dark:text-gray-300"
               >
-                설정
+                {t('consent.settings')}
               </Button>
               <Button
                 variant="secondary"
@@ -134,7 +133,7 @@ export default function CookieConsentBanner() {
                 onClick={handleAcceptNecessary}
                 className="border-gray-300 dark:border-gray-600"
               >
-                필수만
+                {t('consent.acceptNecessary')}
               </Button>
               <Button
                 variant="primary"
@@ -142,7 +141,7 @@ export default function CookieConsentBanner() {
                 onClick={handleAcceptAll}
                 className="bg-blue-600 hover:bg-blue-700"
               >
-                모두 허용
+                {t('consent.acceptAll')}
               </Button>
             </div>
           </div>
@@ -154,13 +153,13 @@ export default function CookieConsentBanner() {
         <ModalHeader>
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-blue-600" />
-            쿠키 설정
+            {t('consent.modalTitle')}
           </div>
         </ModalHeader>
         <ModalBody>
           <div className="space-y-6">
             <p className="text-gray-600 dark:text-gray-300">
-              각 쿠키 카테고리를 개별적으로 허용하거나 거부할 수 있습니다.
+              {t('consent.modalDescription')}
             </p>
 
             {/* 필수 쿠키 */}
@@ -170,15 +169,15 @@ export default function CookieConsentBanner() {
                   <Shield className="w-5 h-5 text-green-600" />
                   <div>
                     <h4 className="font-medium text-gray-900 dark:text-white">
-                      필수 쿠키
+                      {t('consent.necessaryTitle')}
                     </h4>
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      웹사이트 기본 기능에 필요한 쿠키입니다.
+                      {t('consent.necessaryDescription')}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <span className="text-sm font-medium text-green-600">항상 활성</span>
+                  <span className="text-sm font-medium text-green-600">{t('consent.necessaryAlwaysActive')}</span>
                 </div>
               </div>
             </div>
@@ -190,10 +189,10 @@ export default function CookieConsentBanner() {
                   <BarChart3 className="w-5 h-5 text-blue-600" />
                   <div>
                     <h4 className="font-medium text-gray-900 dark:text-white">
-                      분석 쿠키
+                      {t('consent.analyticsTitle')}
                     </h4>
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      Google Analytics를 통한 사용 패턴 분석에 사용됩니다.
+                      {t('consent.analyticsDescription')}
                     </p>
                   </div>
                 </div>
@@ -216,10 +215,10 @@ export default function CookieConsentBanner() {
                   <Target className="w-5 h-5 text-purple-600" />
                   <div>
                     <h4 className="font-medium text-gray-900 dark:text-white">
-                      마케팅 쿠키
+                      {t('consent.marketingTitle')}
                     </h4>
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      맞춤형 광고 및 마케팅 활동에 사용됩니다.
+                      {t('consent.marketingDescription')}
                     </p>
                   </div>
                 </div>
@@ -241,14 +240,14 @@ export default function CookieConsentBanner() {
             variant="secondary"
             onClick={() => setShowModal(false)}
           >
-            취소
+            {t('consent.modalCancel')}
           </Button>
           <Button
             variant="primary"
             onClick={handleCustomSave}
             className="bg-blue-600 hover:bg-blue-700"
           >
-            설정 저장
+            {t('consent.modalSave')}
           </Button>
         </ModalFooter>
       </Modal>
