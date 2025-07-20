@@ -39,7 +39,7 @@ describe('Analytics Component', () => {
     
     const { getByTestId } = render(<Analytics />);
     
-    expect(getByTestId('gtm-init')).toBeInTheDocument();
+    expect(getByTestId('gtm-head')).toBeInTheDocument();
   });
 
   it('should render GA script when only GA ID is provided', () => {
@@ -50,13 +50,13 @@ describe('Analytics Component', () => {
     expect(getByTestId('ga-init')).toBeInTheDocument();
   });
 
-  it('should prioritize GTM over GA when both are provided', () => {
+  it('should render both GTM and GA scripts when both are provided', () => {
     mockEnvModule.env.NEXT_PUBLIC_GA_ID = 'G-TEST123';
     mockEnvModule.env.NEXT_PUBLIC_GTM_ID = 'GTM-TEST456';
     
-    const { getByTestId, queryByTestId } = render(<Analytics />);
+    const { getByTestId } = render(<Analytics />);
     
-    expect(getByTestId('gtm-init')).toBeInTheDocument();
-    expect(queryByTestId('ga-init')).not.toBeInTheDocument();
+    expect(getByTestId('gtm-head')).toBeInTheDocument();
+    expect(getByTestId('ga-gtm-init')).toBeInTheDocument();
   });
 });

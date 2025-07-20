@@ -36,16 +36,17 @@ export default function Topbar() {
   }, [supabase, showError, showSuccess, t]);
 
   useEffect(() => {
-    supabase.auth.getUser()
-      .then(({ data, error }) => {
+    // getSession()이 getUser()보다 안전함 (세션이 없어도 에러 없음)
+    supabase.auth.getSession()
+      .then(({ data: { session }, error }) => {
         if (error) {
-          console.warn('Failed to get user:', error);
+          console.warn('Failed to get session:', error);
         } else {
-          setUser(data.user);
+          setUser(session?.user ?? null);
         }
       })
       .catch((error) => {
-        console.error('Error getting user:', error);
+        console.error('Error getting session:', error);
       });
     
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
