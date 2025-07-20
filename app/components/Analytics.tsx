@@ -1,13 +1,31 @@
 'use client';
 
 import Script from 'next/script';
+import { useState, useEffect } from 'react';
 import { env } from '@/lib/config/env';
+import { isAnalyticsAllowed } from '@/lib/utils/consent-manager';
 
 export default function Analytics() {
+  const [analyticsConsent, setAnalyticsConsent] = useState<boolean | null>(null);
   const hasGTM = env.NEXT_PUBLIC_GTM_ID;
   const hasGA = env.NEXT_PUBLIC_GA_ID;
 
-  if (!hasGTM && !hasGA) {
+  useEffect(() => {
+    checkAnalyticsConsent();
+  }, []);
+
+  const checkAnalyticsConsent = async () => {
+    try {
+      const allowed = await isAnalyticsAllowed();
+      setAnalyticsConsent(allowed);
+    } catch (error) {
+      console.error('Failed to check analytics consent:', error);
+      setAnalyticsConsent(false);
+    }
+  };
+
+  // 동의 확인 중이거나, 동의하지 않았거나, GTM/GA가 없으면 로드하지 않음
+  if (analyticsConsent === null || !analyticsConsent || (!hasGTM && !hasGA)) {
     return null;
   }
 

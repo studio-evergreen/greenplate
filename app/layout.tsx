@@ -8,6 +8,7 @@ import { ToastProvider } from "./components/ToastProvider";
 import { generateSEOConfig } from "./config";
 import { generateMetadata as generateSEOMetadata, generateJsonLd } from "@/lib/utils/seo";
 import Analytics from "./components/Analytics";
+import CookieConsent from "./components/CookieConsent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <LanguageProvider>
               <ToastProvider>
                 {children}
+                <CookieConsent />
               </ToastProvider>
             </LanguageProvider>
           </ThemeProvider>

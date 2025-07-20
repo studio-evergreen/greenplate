@@ -11,6 +11,7 @@ import { useToast } from "../../components/ToastProvider";
 import { handleAuthError } from "@/lib/utils/auth-errors";
 import GoogleIcon from "../../components/GoogleIcon";
 import { validateSignupForm } from "@/lib/utils/form-validation";
+import { trackEvent } from "@/lib/utils/analytics";
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -54,10 +55,25 @@ export default function SignupPage() {
         showError(
           t(errorInfo.translationKey || 'auth.errors.generic') || errorInfo.message
         );
+        
+        // 회원가입 실패 이벤트 추적
+        trackEvent('sign_up_failed', {
+          event_category: 'auth',
+          method: 'email',
+          error_code: signUpError.message
+        });
       } else {
         showSuccess(
           t("signup.emailSent") || "Check your email to verify your account!"
         );
+        
+        // 회원가입 성공 이벤트 추적
+        trackEvent('sign_up', {
+          event_category: 'auth',
+          method: 'email',
+          success: true
+        });
+        
         form.reset();
       }
     } catch (error) {
@@ -136,6 +152,12 @@ export default function SignupPage() {
           fullWidth
           className="mb-2 flex items-center justify-center gap-2"
           onClick={async () => {
+            // Google 회원가입 시도 이벤트 추적
+            trackEvent('sign_up_attempt', {
+              event_category: 'auth',
+              method: 'google'
+            });
+            
             const supabase = createSupabaseClientForBrowser();
             await supabase.auth.signInWithOAuth({ provider: "google" });
           }}

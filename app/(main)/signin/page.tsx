@@ -12,6 +12,7 @@ import { useToast } from "../../components/ToastProvider";
 import { handleAuthError } from "@/lib/utils/auth-errors";
 import GoogleIcon from "../../components/GoogleIcon";
 import { validateSigninForm } from "@/lib/utils/form-validation";
+import { trackEvent } from "@/lib/utils/analytics";
 
 export default function SigninPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -48,8 +49,23 @@ export default function SigninPage() {
         showError(
           t(errorInfo.translationKey || 'auth.errors.generic') || errorInfo.message
         );
+        
+        // 로그인 실패 이벤트 추적
+        trackEvent('login_failed', {
+          event_category: 'auth',
+          method: 'email',
+          error_code: signInError.message
+        });
       } else {
         showSuccess(t("signin.success") || "Successfully signed in!");
+        
+        // 로그인 성공 이벤트 추적
+        trackEvent('login', {
+          event_category: 'auth',
+          method: 'email',
+          success: true
+        });
+        
         router.push(ROUTES.HOME);
       }
     } catch (error) {
@@ -89,6 +105,12 @@ export default function SigninPage() {
           fullWidth
           className="mb-2 flex items-center justify-center gap-2"
           onClick={async () => {
+            // Google 로그인 시도 이벤트 추적
+            trackEvent('login_attempt', {
+              event_category: 'auth',
+              method: 'google'
+            });
+            
             const supabase = createSupabaseClientForBrowser();
             await supabase.auth.signInWithOAuth({ provider: "google" });
           }}
