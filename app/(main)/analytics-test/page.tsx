@@ -675,6 +675,67 @@ export default function AnalyticsTestPage() {
         </Card>
       )}
 
+      {/* GTM Testing Guide */}
+      {isConfigured && config?.hasGTM && (
+        <Card className="mb-8">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Eye className="w-5 h-5 text-blue-500" />
+              <h2 className="text-xl font-semibold">GTM 실시간 테스트 가이드</h2>
+            </div>
+          </CardHeader>
+          <CardBody>
+            <div className="space-y-4">
+              <p className="text-[var(--muted)]">
+                위 버튼들을 클릭하면서 GTM에서 실시간으로 데이터를 확인하세요:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-medium mb-3 flex items-center gap-2">
+                    <Settings className="w-4 h-4" />
+                    GTM Preview 모드
+                  </h4>
+                  <ol className="list-decimal list-inside space-y-2 text-sm text-[var(--muted)]">
+                    <li>GTM 대시보드에서 &quot;Preview&quot; 버튼 클릭</li>
+                    <li>이 페이지 URL을 연결</li>
+                    <li>위 버튼들 클릭하면서 실시간 확인</li>
+                  </ol>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium mb-3 flex items-center gap-2">
+                    <Activity className="w-4 h-4" />
+                    브라우저 개발자 도구
+                  </h4>
+                  <div className="text-sm">
+                    <p className="text-[var(--muted)] mb-2">콘솔에서 실행:</p>
+                    <div className="bg-[var(--muted)]/10 p-3 rounded font-mono text-xs">
+                      console.log(window.dataLayer)
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-1">
+                      실시간 테스트 팁
+                    </h4>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">
+                      각 버튼을 클릭한 후 GTM Preview 창에서 해당 이벤트가 발생하는지 확인하세요. 
+                      GA4 실시간 보고서에서도 즉시 데이터를 볼 수 있습니다.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+      )}
+
       {/* Event Logs */}
       {eventLogs.length > 0 && (
         <Card>
