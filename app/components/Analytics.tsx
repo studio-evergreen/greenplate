@@ -25,6 +25,18 @@ export default function Analytics() {
               })(window,document,'script','dataLayer','${env.NEXT_PUBLIC_GTM_ID}');
             `}
           </Script>
+          
+          {/* GA4 초기화 (GTM을 통해) */}
+          {hasGA && (
+            <Script id="ga-gtm-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${env.NEXT_PUBLIC_GA_ID}');
+              `}
+            </Script>
+          )}
         </>
       )}
       

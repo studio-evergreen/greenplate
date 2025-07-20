@@ -24,15 +24,29 @@ export function trackEvent<T extends string>(
 ): void {
   if (typeof window === 'undefined') return;
   
-  // GTM 사용 시 dataLayer에 직접 push
-  if (env.NEXT_PUBLIC_GTM_ID && window.dataLayer) {
+  // GTM과 GA가 모두 설정된 경우 (권장)
+  if (env.NEXT_PUBLIC_GTM_ID && env.NEXT_PUBLIC_GA_ID) {
+    // GTM dataLayer에 이벤트 전송
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: eventName,
+        ...properties,
+      });
+    }
+    // gtag을 통해서도 GA에 직접 전송 (백업)
+    if (window.gtag) {
+      window.gtag('event', eventName, properties);
+    }
+  }
+  // GTM만 있는 경우
+  else if (env.NEXT_PUBLIC_GTM_ID && window.dataLayer) {
     window.dataLayer.push({
       event: eventName,
       ...properties,
     });
   }
-  // GA만 사용하는 경우 gtag 사용
-  else if (window.gtag && env.NEXT_PUBLIC_GA_ID) {
+  // GA만 있는 경우
+  else if (env.NEXT_PUBLIC_GA_ID && window.gtag) {
     window.gtag('event', eventName, properties);
   }
 }
