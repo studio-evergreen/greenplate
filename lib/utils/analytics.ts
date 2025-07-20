@@ -24,7 +24,15 @@ export function trackEvent<T extends string>(
 ): void {
   if (typeof window === 'undefined') return;
   
-  if (window.gtag && (env.NEXT_PUBLIC_GA_ID || env.NEXT_PUBLIC_GTM_ID)) {
+  // GTM 사용 시 dataLayer에 직접 push
+  if (env.NEXT_PUBLIC_GTM_ID && window.dataLayer) {
+    window.dataLayer.push({
+      event: eventName,
+      ...properties,
+    });
+  }
+  // GA만 사용하는 경우 gtag 사용
+  else if (window.gtag && env.NEXT_PUBLIC_GA_ID) {
     window.gtag('event', eventName, properties);
   }
 }
