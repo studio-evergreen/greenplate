@@ -22,7 +22,7 @@ import { ComponentExample } from "../../components/CodeBlock";
 import { 
   Search, Heart, User, Settings, MapPin, Globe, Star,
   Menu, X, Palette, Code, Smartphone,
-  Database, Shield, Layers, Zap, Bell, CheckCircle, AlertCircle
+  Database, Shield, Layers, Zap, Bell, CheckCircle, AlertCircle, BarChart3
 } from "lucide-react";
 
 // Navigation sections for sidebar
@@ -71,6 +71,12 @@ const navigationSections = [
       { id: "icons", label: "Icons", icon: <Star size={16} /> },
       { id: "providers", label: "Providers", icon: <Database size={16} /> },
       { id: "error", label: "Error Boundary", icon: <Shield size={16} /> }
+    ]
+  },
+  {
+    title: "Testing",
+    items: [
+      { id: "analytics", label: "Analytics Test", icon: <BarChart3 size={16} /> }
     ]
   }
 ];
@@ -129,6 +135,13 @@ export default function ComponentsPage() {
   // Scroll to section
   const scrollToSection = (sectionId: string) => {
     setActiveSection(sectionId);
+    
+    // Handle special analytics page navigation
+    if (sectionId === 'analytics') {
+      window.location.href = '/analytics-test';
+      return;
+    }
+    
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });

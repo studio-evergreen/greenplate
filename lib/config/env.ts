@@ -8,6 +8,8 @@ const envSchema = z.object({
   SENTRY_ORG: z.string().optional(),
   SENTRY_PROJECT: z.string().optional(),
   NEXT_PUBLIC_SENTRY_ENABLED: z.string().optional(),
+  NEXT_PUBLIC_GTM_ID: z.string().optional(),
+  NEXT_PUBLIC_GA_ID: z.string().optional(),
 });
 
 function validateEnv() {
@@ -20,6 +22,8 @@ function validateEnv() {
       SENTRY_ORG: process.env.SENTRY_ORG,
       SENTRY_PROJECT: process.env.SENTRY_PROJECT,
       NEXT_PUBLIC_SENTRY_ENABLED: process.env.NEXT_PUBLIC_SENTRY_ENABLED,
+      NEXT_PUBLIC_GTM_ID: process.env.NEXT_PUBLIC_GTM_ID,
+      NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
     });
   } catch (error) {
     console.error("Environment validation failed:", error);
