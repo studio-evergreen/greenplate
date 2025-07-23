@@ -129,11 +129,11 @@ export default function SignupPage() {
             />
           </div>
           <div className="flex items-center gap-2 mt-2">
-            <input type="checkbox" id="marketing" className="accent-green-500" />
+            <input type="checkbox" id="marketing" className="accent-emerald-600" />
             <label htmlFor="marketing" className="text-[var(--muted)] text-sm">{t("signup.marketing")}</label>
           </div>
           <div className="flex items-center gap-2">
-            <input name="terms" type="checkbox" id="terms" required className="accent-green-500" />
+            <input name="terms" type="checkbox" id="terms" required className="accent-emerald-600" />
             <label htmlFor="terms" className="text-[var(--muted)] text-sm">
               {t("signup.agree1")}<Link href={ROUTES.TERMS} className="underline ml-1">{t("signup.terms")}</Link>{t("signup.agree2")}<Link href={ROUTES.PRIVACY} className="underline ml-1">{t("signup.privacy")}</Link>
             </label>

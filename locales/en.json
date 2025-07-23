@@ -32,7 +32,18 @@
     "signoutSuccess": "Successfully signed out",
     "errors": {
       "signoutFailed": "Failed to sign out",
-      "generic": "An unexpected error occurred"
+      "generic": "An unexpected error occurred",
+      "unknown": "An unknown error occurred",
+      "invalidCredentials": "Invalid email or password",
+      "emailNotConfirmed": "Please check your email and confirm your account",
+      "userExists": "An account with this email already exists",
+      "passwordTooShort": "Password must be at least 8 characters long",
+      "invalidEmail": "Please enter a valid email address",
+      "network": "Network error. Please check your connection and try again",
+      "rateLimit": "Too many attempts. Please try again later",
+      "allFieldsRequired": "Please fill in all required fields",
+      "passwordMismatch": "Passwords do not match",
+      "termsRequired": "You must agree to the terms and conditions"
     }
   },
   "home": {
@@ -59,6 +70,7 @@
     "privacy": "Privacy Policy",
     "creating": "Creating...",
     "create": "Create account",
+    "emailSent": "Check your email to verify your account!",
     "or": "OR",
     "already": "Already have an account? "
   },
